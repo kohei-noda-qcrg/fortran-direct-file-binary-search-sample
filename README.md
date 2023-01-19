@@ -37,24 +37,34 @@ FC=ifort make
     ```txt
     File size:             240000000
     File lines:              10000000
-                        1
-    Seek:             120000000
                 5000001
-    Seek:              60000000
+    line_min:                     0
+    line_cur:                     0
+    line_max:              10000000
+    Seek:             120000000
                 2500001
+    line_min:                     0
+    line_cur:                     0
+    line_max:               5000000
+    Seek:              60000000
+                1250001
         .
         .
         .
-    Seek:              23999880
-                999996
-    Seek:              23999976
+    line_min:                999992
+    line_cur:                999992
+    line_max:               1000002
+    Seek:              23999928
                 1000000
+    line_min:                999997
+    line_cur:                999997
+    line_max:               1000002
     Found:               1000000
     Value:    1000000.0000000000
     Access count:                    22
-    [binary search] Time taken:    1.5700000000000002E-004  seconds
+    [binary search] Time taken:    2.5700000000000007E-004  seconds
     Found               1000000
     Value:    1000000.0000000000
     Access count:               1000000
-    [sequential search] Time taken:    9.9616999999999997E-002  seconds
+    [sequential search] Time taken:   0.10264200000000000       seconds
     ```
