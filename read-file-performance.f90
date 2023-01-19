@@ -6,7 +6,7 @@ program readfileperf
     character(len=100) :: fname = "binaryfile"
     integer(4) :: funit = 100
     integer(8) :: idx, ios, seek
-    integer(8) :: search = 10**6, step, file_size, file_lines
+    integer(8) :: search = 10**6, file_size, file_lines, line_min, line_cur, line_max
     integer(8) :: data_size_per_line = 8*3, access_count = 0
     ! data_per_line = 8*3 because 1 integer and 1 real(8) and 1 additional info
     ! Open file
@@ -17,15 +17,18 @@ program readfileperf
     ! Calculate file lines
     file_lines = file_size/data_size_per_line
     print *, "File lines: ", file_lines
-    step = file_lines
+    ! Calculate line_cur
+    line_min = 0
+    line_max = file_lines
     seek = 0
-    x = 0
     close (funit)
     ! Start timer
     call cpu_time(start_time)
     open (funit, file=fname, status='old', form='unformatted', iostat=ios)
     do
-        ! file binary search using fseek and step
+        ! file binary search using fseek and line_cur
+        line_cur = line_min + (line_max - line_min)/2
+        seek = line_cur*data_size_per_line
         call fseek(funit, seek, 0)
         read (funit, iostat=ios) idx, x
         access_count = access_count + 1
@@ -35,15 +38,23 @@ program readfileperf
             exit
         end if
         print *, idx
-        step = step/2
+        print *, "line_min: ", line_min
+        print *, "line_cur: ", line_min
+        print *, "line_max: ", line_max
         if (idx < search) then
-            seek = seek + step*data_size_per_line
+            line_min = line_cur
         else if (idx > search) then
-            seek = seek - step*data_size_per_line
+            line_max = line_cur
         else
             print *, "Found: ", idx
             print *, "Value: ", x
             print *, "Access count: ", access_count
+            exit
+        end if
+
+        ! Not found
+        if ( line_max - 1 <= line_min) then
+            print *, "Not found ", search, " in file"
             exit
         end if
         print *, "Seek: ", seek
