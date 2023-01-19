@@ -9,17 +9,19 @@ program readfileperf
     integer(8) :: search = 10**6, step, file_size, file_lines
     integer(8) :: data_size_per_line = 8*3, access_count = 0
     ! data_per_line = 8*3 because 1 integer and 1 real(8) and 1 additional info
-    ! 2. Open file
+    ! Open file
     open (unit=funit, file=fname, status='old', action='read', iostat=ios)
+    ! Get the file size
     inquire (funit, size=file_size)
     print *, "File size: ", file_size
+    ! Calculate file lines
     file_lines = file_size/data_size_per_line
     print *, "File lines: ", file_lines
     step = file_lines
     seek = 0
     x = 0
     close (funit)
-    ! 2. Start timer
+    ! Start timer
     call cpu_time(start_time)
     open (funit, file=fname, status='old', form='unformatted', iostat=ios)
     do
