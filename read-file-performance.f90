@@ -6,7 +6,7 @@ program readfileperf
     character(len=100) :: fname = "binaryfile"
     integer(4) :: funit = 100
     integer(8) :: idx, ios, seek
-    integer(8) :: search = 10**6, file_size, file_lines, line_min, line_cur, line_max
+    integer(8) :: search = 10**7, file_size, file_lines, line_min, line_cur, line_max
     integer(8) :: data_size_per_line = 8*3, access_count = 0
     ! data_per_line = 8*3 because 1 integer and 1 real(8) and 1 additional info
     ! Open file
@@ -39,7 +39,7 @@ program readfileperf
         end if
         print *, idx
         print *, "line_min: ", line_min
-        print *, "line_cur: ", line_min
+        print *, "line_cur: ", line_cur
         print *, "line_max: ", line_max
         if (idx < search) then
             line_min = line_cur
@@ -53,7 +53,7 @@ program readfileperf
         end if
 
         ! Not found
-        if ( line_max - 1 <= line_min) then
+        if (line_max <= line_min) then
             print *, "Not found ", search, " in file"
             exit
         end if
